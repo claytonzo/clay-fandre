@@ -278,6 +278,86 @@ section {
   line-height: 1.4;
 }
 
+/* ── NASA ── */
+#nasa {
+  background:
+    radial-gradient(ellipse 70% 60% at 80% 10%, rgba(74,158,255,0.08) 0%, transparent 60%),
+    var(--dark);
+  border-top: 1px solid rgba(74,158,255,0.12);
+  border-bottom: 1px solid rgba(74,158,255,0.12);
+}
+
+.nasa-intro {
+  font-size: 1.05rem;
+  line-height: 1.8;
+  color: var(--muted);
+  max-width: 720px;
+  margin: -1.5rem 0 3rem;
+}
+
+.nasa-intro strong { color: var(--text); }
+
+.nasa-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
+  margin-bottom: 2.5rem;
+}
+
+.nasa-card {
+  background: rgba(74,158,255,0.04);
+  border: 1px solid rgba(74,158,255,0.18);
+  border-radius: 12px;
+  padding: 1.75rem;
+  transition: border-color 0.25s, background 0.25s, transform 0.25s;
+}
+
+.nasa-card:hover {
+  border-color: rgba(74,158,255,0.45);
+  background: rgba(74,158,255,0.08);
+  transform: translateY(-4px);
+}
+
+.nasa-card--wide {
+  grid-column: span 3;
+  background: linear-gradient(135deg, rgba(74,158,255,0.08) 0%, rgba(0,212,255,0.04) 100%);
+  border-color: rgba(0,212,255,0.3);
+}
+
+.nasa-icon { font-size: 1.8rem; margin-bottom: 0.9rem; }
+
+.nasa-card h3 {
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 0.6rem;
+  color: var(--text);
+}
+
+.nasa-card--wide h3 { font-size: 1.25rem; color: var(--cyan); }
+
+.nasa-card p {
+  font-size: 0.9rem;
+  line-height: 1.75;
+  color: var(--muted);
+}
+
+.nasa-card p strong { color: var(--cyan); }
+
+.nasa-link {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: 0.82rem;
+  color: var(--blue);
+  transition: color 0.2s;
+}
+
+.nasa-link:hover { color: var(--cyan); }
+
+@media (max-width: 900px) {
+  .nasa-grid { grid-template-columns: 1fr; }
+  .nasa-card--wide { grid-column: span 1; }
+}
+
 /* ── Career Timeline ── */
 #career { background: var(--dark); }
 .timeline {
