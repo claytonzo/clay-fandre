@@ -1,0 +1,89 @@
+// ── Animated particle/node background ──
+const canvas = document.getElementById('bg-canvas');
+const ctx = canvas.getContext('2d');
+let W, H, nodes = [], RAF;
+
+function resize() {
+  W = canvas.width  = window.innerWidth;
+  H = canvas.height = window.innerHeight;
+}
+
+function initNodes(n = 60) {
+  nodes = Array.from({ length: n }, () => ({
+    x: Math.random() * W,
+    y: Math.random() * H,
+    vx: (Math.random() - 0.5) * 0.3,
+    vy: (Math.random() - 0.5) * 0.3,
+    r: Math.random() * 1.5 + 0.5,
+  }));
+}
+
+function draw() {
+  ctx.clearRect(0, 0, W, H);
+
+  // Update & draw nodes
+  for (const n of nodes) {
+    n.x += n.vx; n.y += n.vy;
+    if (n.x < 0 || n.x > W) n.vx *= -1;
+    if (n.y < 0 || n.y > H) n.vy *= -1;
+    ctx.beginPath();
+    ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
+    ctx.fillStyle = 'rgba(74,158,255,0.6)';
+    ctx.fill();
+  }
+
+  // Draw edges between close nodes
+  for (let i = 0; i < nodes.length; i++) {
+    for (let j = i + 1; j < nodes.length; j++) {
+      const dx = nodes[i].x - nodes[j].x;
+      const dy = nodes[i].y - nodes[j].y;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+      if (dist < 140) {
+        ctx.beginPath();
+        ctx.moveTo(nodes[i].x, nodes[i].y);
+        ctx.lineTo(nodes[j].x, nodes[j].y);
+        ctx.strokeStyle = `rgba(74,158,255,${0.15 * (1 - dist / 140)})`;
+        ctx.lineWidth = 0.6;
+        ctx.stroke();
+      }
+    }
+  }
+
+  RAF = requestAnimationFrame(draw);
+}
+
+resize();
+initNodes();
+draw();
+window.addEventListener('resize', () => { resize(); initNodes(); });
+
+// ── Sticky nav ──
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', window.scrollY > 60);
+});
+
+// ── Scroll fade-in ──
+const observer = new IntersectionObserver(
+  entries => entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('visible');
+      observer.unobserve(e.target);
+    }
+  }),
+  { threshold: 0.1 }
+);
+
+const style = document.createElement('style');
+style.textContent = `
+  .fade-in { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease, transform 0.6s ease; }
+  .fade-in.visible { opacity: 1; transform: none; }
+`;
+document.head.appendChild(style);
+
+document.querySelectorAll('.tl-content, .exp-card, .beyond-card, .about-text p, .a-stat')
+  .forEach((el, i) => {
+    el.classList.add('fade-in');
+    el.style.transitionDelay = `${(i % 4) * 0.08}s`;
+    observer.observe(el);
+  });
