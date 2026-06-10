@@ -57,6 +57,33 @@ initNodes();
 draw();
 window.addEventListener('resize', () => { resize(); initNodes(); });
 
+// ── Terminal typing animation ──
+const termLines = document.querySelectorAll('.terminal-body p');
+termLines.forEach(p => p.style.visibility = 'hidden');
+
+(async function playTerminal() {
+  await new Promise(r => setTimeout(r, 1400)); // wait for hero fade-in
+
+  for (const line of termLines) {
+    line.style.visibility = 'visible';
+    const cmd = line.querySelector('.t-cmd');
+
+    if (cmd) {
+      // type the command character by character
+      const text = cmd.textContent;
+      cmd.textContent = '';
+      for (const ch of text) {
+        cmd.textContent += ch;
+        await new Promise(r => setTimeout(r, 35 + Math.random() * 45));
+      }
+      await new Promise(r => setTimeout(r, 220));
+    } else {
+      // output lines appear quickly
+      await new Promise(r => setTimeout(r, 90));
+    }
+  }
+})();
+
 // ── Sticky nav ──
 const nav = document.getElementById('nav');
 window.addEventListener('scroll', () => {
